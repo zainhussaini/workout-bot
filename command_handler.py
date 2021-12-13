@@ -7,44 +7,37 @@ import re
 
 
 def pretty_delta(date: datetime.datetime, now: datetime.datetime) -> str:
-    """Pretty time difference for saying how long ago workout was.
-
-    < 0 => "in the future?"
-    < 2 seconds => "just now"
-    < 1 minute => "x seconds ago"
-    < 2 minutes => "1 minute ago"
-    < 1 hour => "x minutes ago"
-    < 2 hours => "1 hour ago"
-    < 1 day => "x hours ago"
-    < 14 days => "days ago"
-    < 60 days => show date with format "on January 1"
-    > 60 days year => show date with format "on January 1, 2020"
-    """
+    """Pretty time difference for saying how long ago workout was."""
     # based on https://stackoverflow.com/a/5164027
     diff = now - date
     total_seconds = diff.total_seconds()
+    mins, secs = divmod(int(total_seconds), 60)
+    hours, mins = divmod(mins, 60)
+    days, hours = divmod(hours, 24)
+    assert days == diff.days
+
     if total_seconds < 0:
         return "in the future?"
-    elif total_seconds < 2:
-        return f"just now"
+    elif total_seconds < 10:
+        return f"{total_seconds:.2f} seconds ago"
     elif total_seconds < 60:
-        return f"{int(total_seconds)} seconds ago"
-    elif total_seconds < 2*60:
-        return f"1 minute ago"
+        return f"{total_seconds:.1f} seconds ago"
     elif total_seconds < 60*60:
-        return f"{int(total_seconds)//60} minutes ago"
-    elif total_seconds < 2*60*60:
-        return f"1 hour ago"
+        end1 = 's' if mins != 1 else ''
+        end2 = 's' if secs != 1 else ''
+        return f"{mins} minute{end1} {secs} second{end2} ago"
     elif total_seconds < 24*60*60:
-        return f"{int(total_seconds)//(60*60)} hours ago"
-    elif total_seconds < 2*24*60*60:
-        return f"1 day ago"
+        end1 = 's' if hours != 1 else ''
+        end2 = 's' if mins != 1 else ''
+        return f"{hours} hour{end1} {mins} minute{end2} ago"
     elif total_seconds < 14*24*60*60:
-        return f"{int(total_seconds)//(24*60*60)} days ago"
+        end1 = 's' if days != 1 else ''
+        end2 = 's' if hours != 1 else ''
+        return f"{days} day{end1} {hours} hour{end2} ago"
     elif total_seconds < 60*24*60*60:
-        return date.strftime("on %B %d")
+        return date.strftime("on %B %-d")
     else:
-        return date.strftime("on %B %d, %Y")
+        return date.strftime("on %B %-d, %Y")
 
 
 def shorten_name(name: str, length: int = -1) -> str:

@@ -3,74 +3,44 @@ import numpy as np
 from command_handler import pretty_delta, shorten_name
 
 
-def generate_range(start, max):
-    # precision is down to 10e-6 of second
-    return np.linspace(start, max-10e-6, 100)
-
-
 def test_pretty_delta():
     # january 1 2021 at midnight
     now = datetime.datetime(2021, 1, 1)
 
-    one_sec = 1
-    one_min = 60
-    one_hour = 60*60
-    one_day = 24*60*60
-
-    for seconds in generate_range(0, 2*one_sec):
-        date = now - datetime.timedelta(seconds=seconds)
-        assert pretty_delta(date, now) == "just now"
-
-    for seconds in generate_range(2*one_sec, one_min):
-        date = now - datetime.timedelta(seconds=seconds)
-        assert pretty_delta(date, now) == f"{int(seconds)} seconds ago"
-
-    for seconds in generate_range(one_min, 2*one_min):
-        date = now - datetime.timedelta(seconds=seconds)
-        assert pretty_delta(date, now) == "1 minute ago"
-
-    for seconds in generate_range(2*one_min, one_hour):
-        date = now - datetime.timedelta(seconds=seconds)
-        assert pretty_delta(date, now) == f"{int(seconds)//60} minutes ago"
-
-    for seconds in generate_range(one_hour, 2*one_hour):
-        date = now - datetime.timedelta(seconds=seconds)
-        assert pretty_delta(date, now) == "1 hour ago"
-
-    for seconds in generate_range(2*one_hour, one_day):
-        date = now - datetime.timedelta(seconds=seconds)
-        assert pretty_delta(date, now) == f"{int(seconds)//(60*60)} hours ago"
-
-    for seconds in generate_range(one_day, 2*one_day):
-        date = now - datetime.timedelta(seconds=seconds)
-        assert pretty_delta(date, now) == f"1 day ago"
-
-    for seconds in generate_range(2*one_day, 14*one_day):
-        date = now - datetime.timedelta(seconds=seconds)
-        assert pretty_delta(date, now) == f"{int(seconds)//(24*60*60)} days ago"
-
-    for seconds in generate_range(14*one_day, 60*one_day):
-        date = now - datetime.timedelta(seconds=seconds)
-        assert pretty_delta(date, now).startswith("on ")
-        assert len(pretty_delta(date, now).split(" ")) == 3
-
-    for seconds in generate_range(60*one_day, 1000*one_day):
-        date = now - datetime.timedelta(seconds=seconds)
-        assert pretty_delta(date, now).startswith("on ")
-        assert len(pretty_delta(date, now).split(" ")) == 4
+    diff = datetime.timedelta(seconds=640.991709)
+    assert pretty_delta(now - diff, now) == "10 minutes 40 seconds ago"
+    diff = datetime.timedelta(seconds=9139.466984)
+    assert pretty_delta(now - diff, now) == "2 hours 32 minutes ago"
+    diff = datetime.timedelta(seconds=1517.317412)
+    assert pretty_delta(now - diff, now) == "25 minutes 17 seconds ago"
+    diff = datetime.timedelta(seconds=601.990568)
+    assert pretty_delta(now - diff, now) == "10 minutes 1 second ago"
+    diff = datetime.timedelta(seconds=86.833506)
+    assert pretty_delta(now - diff, now) == "1 minute 26 seconds ago"
+    diff = datetime.timedelta(seconds=3021.714242)
+    assert pretty_delta(now - diff, now) == "50 minutes 21 seconds ago"
+    diff = datetime.timedelta(seconds=108.475011)
+    assert pretty_delta(now - diff, now) == "1 minute 48 seconds ago"
+    diff = datetime.timedelta(seconds=153389.515296)
+    assert pretty_delta(now - diff, now) == "1 day 18 hours ago"
+    diff = datetime.timedelta(seconds=483570.702954)
+    assert pretty_delta(now - diff, now) == "5 days 14 hours ago"
+    diff = datetime.timedelta(seconds=45.682237)
+    assert pretty_delta(now - diff, now) == "45.7 seconds ago"
+    diff = datetime.timedelta(seconds=4.568223)
+    assert pretty_delta(now - diff, now) == "4.57 seconds ago"
 
     date = datetime.datetime(2021, 1, 1)
     now = datetime.datetime(2021, 1, 3)
-    print(now - date)
-    assert pretty_delta(date, now) == f"2 days ago"
+    assert pretty_delta(date, now) == "2 days 0 hours ago"
 
     date = datetime.datetime(2021, 1, 1)
     now = datetime.datetime(2021, 10, 1)
-    assert pretty_delta(date, now) == f"on January 01, 2021"
+    assert pretty_delta(date, now) == "on January 1, 2021"
 
     date = datetime.datetime(2021, 1, 1)
     now = datetime.datetime(2021, 2, 1)
-    assert pretty_delta(date, now) == f"on January 01"
+    assert pretty_delta(date, now) == "on January 1"
     assert pretty_delta(now, date) == "in the future?"
 
 def test_shorten_name():
