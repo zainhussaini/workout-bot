@@ -115,9 +115,9 @@ class CommandHandler:
         else:
             now = datetime.datetime.now()
             if name is None:
-                response = f"You now have {points} points. Your last workout was over {pretty_delta(last_workout_date, now)}."
+                response = f"You now have {points} points. Your last workout was {pretty_delta(last_workout_date, now)}."
             else:
-                response = f"{name} now has {points} points. Their last workout was over {pretty_delta(last_workout_date, now)}."
+                response = f"{name} now has {points} points. Their last workout was {pretty_delta(last_workout_date, now)}."
         return response
 
     def _loser(message: discord.Message, args: "list[str]") -> str:
