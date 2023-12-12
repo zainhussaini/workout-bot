@@ -29,3 +29,17 @@ python3 main.py
 ```bash
 nohup python3 main.py &
 ```
+
+### Usage
+
+Once you add the bot to the Discord channel, you can log workouts by `!point`.
+
+![Screenshot 2023-12-12 at 1 00 15 AM](https://github.com/zainhussaini/workout-bot/assets/6494905/370954ec-c4ea-4658-bb73-68714b7783b8)
+
+You can check the rankings by `!scoreboard`. The users with logged workouts are shown ranked by score.
+
+![Screenshot 2023-12-12 at 1 00 15 AM](https://github.com/zainhussaini/workout-bot/assets/6494905/7bd6b7b5-ffe4-4e67-a7e2-54249a60b0c0)
+
+The full list of commands is found by by `!help`.
+
+![image](https://github.com/zainhussaini/workout-bot/assets/6494905/bd911ab2-4598-4853-a83f-99dbe052a1a1)
